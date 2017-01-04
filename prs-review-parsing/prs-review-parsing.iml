@@ -23,5 +23,7 @@
     <orderEntry type="library" name="Maven: javax.json:javax.json-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.12" level="project" />
     <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:models:3.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.6.4" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.0.2" level="project" />
   </component>
 </module>
