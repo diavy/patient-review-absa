@@ -2,6 +2,7 @@ import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import edu.stanford.nlp.ling.LabeledWord;
+import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
@@ -55,6 +56,10 @@ public class SimpleCoreNLPDemo {
             List<String> np = demo.getNounPhrases(parseTree);
             System.out.println(sent);
             System.out.println(np);
+            System.out.println(sent.dependencyGraph());
+            SemanticGraph graph = sent.dependencyGraph();
+            System.out.println(graph.edgeCount());
+            //System.out.println(graph.getEdge("Healed", "back"));
             //System.out.println(sent.)
         }
         /*Tree tree = demo.testParse();
