@@ -7,9 +7,11 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -42,6 +44,9 @@ public class CoreNLPDemo {
         for (CoreMap sentence : sentences) {
             // traversing the words in the current sentence
             // a CoreLabel is a CoreMap with additional token-specific methods
+
+            // Print sentence's key
+            System.out.println("Sentence's keys: " + sentence.keySet());
             for (CoreLabel token : sentence.get(TokensAnnotation.class)) {
                 // this is the text of the token
                 String word = token.get(TextAnnotation.class);
@@ -63,14 +68,34 @@ public class CoreNLPDemo {
             // this is the Stanford dependency graph of the current sentence
             SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
             System.out.println("dependency graph:\n" + dependencies);
+            System.out.println("dependency graph:\n" + dependencies.toString(SemanticGraph.OutputFormat.LIST));
+            tree.pennPrint();
 
             // this is the sentiiment of the current sentence
             String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            System.out.println("sentiment:\n" + sentiment + "\t" + sentence);
+            System.out.println("sentiment:\n" + sentiment + ":\t" + sentence);
             Tree sentTree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
-            System.out.println(sentTree);
-            int score = RNNCoreAnnotations.getPredictedClass(sentTree);
-            System.out.println(sentimentText[score]);
+            sentTree.pennPrint();
+            //System.out.println(sentTree);
+            //int score = RNNCoreAnnotations.getPredictedClass(sentTree);
+            //System.out.println(sentimentText[score]);
+
+            // GO through each node, and extract sentiment score
+            Iterator<Tree> it = sentTree.iterator();
+            while (it.hasNext()) {
+                Tree t = it.next();
+                System.out.println(t.yield());
+                System.out.println("nodestring:" + t.nodeString());
+                if (((CoreLabel) t.label()).containsKey(RNNCoreAnnotations.PredictedClass.class)) {
+                    System.out.println("Predicted Class: " + RNNCoreAnnotations.getPredictedClass(t));
+                }
+                //System.out.println(RNNCoreAnnotations.getNodeVector(t));
+                //System.out.println(RNNCoreAnnotations.getPredictions(t));
+            }
+
+            // Go through each node, and print out dependencies
+            Tree depTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+
 
         }
 
