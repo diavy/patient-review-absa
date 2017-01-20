@@ -22,12 +22,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="prs-common" />
         <module name="prs-review-parsing" />
         <module name="stanford-core-nlp-test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="patient-review-absa" target="1.5" />
+      <module name="prs-common" target="1.5" />
       <module name="prs-review-parsing" target="1.5" />
       <module name="stanford-core-nlp-test" target="1.5" />
     </bytecodeTargetLevel>
