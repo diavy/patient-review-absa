@@ -21,4 +21,6 @@ public class Aspect {
 
     protected String target;
 
+    protected String plarityNode;
+
 }
