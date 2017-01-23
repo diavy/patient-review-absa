@@ -28,7 +28,7 @@ public class CoreNLPDemo {
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
         // add some text here
-        String text = "I went there yesterday. Dr. Gustin is very happy";
+        String text = "I chose this chiropractor because of the many 5 star and enthusiastic reviews. He might still be right for you; I write this as an alert based upon my own experience.";
 
         String[] sentimentText = {"Very Negative", "Negative", "Neutral", "Positive", "Very Positive"};
 
