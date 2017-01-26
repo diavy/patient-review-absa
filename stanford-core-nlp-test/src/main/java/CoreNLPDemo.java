@@ -11,7 +11,6 @@ import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -28,7 +27,8 @@ public class CoreNLPDemo {
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
         // add some text here
-        String text = "I chose this chiropractor because of the many 5 star and enthusiastic reviews. He might still be right for you; I write this as an alert based upon my own experience.";
+        String text = "The food is delicious, but the service is terrible"; // conflict sentiment
+        //String text = "I went to the airport yesterday"; // neutural sentiment
 
         String[] sentimentText = {"Very Negative", "Negative", "Neutral", "Positive", "Very Positive"};
 
@@ -81,16 +81,24 @@ public class CoreNLPDemo {
             //System.out.println(sentimentText[score]);
 
             // GO through each node, and extract sentiment score
-            Iterator<Tree> it = sentTree.iterator();
+            /*Iterator<Tree> it = sentTree.iterator();
             while (it.hasNext()) {
                 Tree t = it.next();
                 System.out.println(t.yield());
                 System.out.println("nodestring:" + t.nodeString());
+                //System.out.println("children:" + t.getChildrenAsList().toString());
                 if (((CoreLabel) t.label()).containsKey(RNNCoreAnnotations.PredictedClass.class)) {
                     System.out.println("Predicted Class: " + RNNCoreAnnotations.getPredictedClass(t));
                 }
                 //System.out.println(RNNCoreAnnotations.getNodeVector(t));
                 //System.out.println(RNNCoreAnnotations.getPredictions(t));
+            }*/
+
+            // go through the children of the root node, and extract its sentiment class
+            List<Tree> firstLevelChildren = sentTree.getChildrenAsList();
+            for (Tree child : firstLevelChildren) {
+                System.out.println("Node:" + child.yield());
+                System.out.println("Predicted Class: " + RNNCoreAnnotations.getPredictedClass(child));
             }
 
             // Go through each node, and print out dependencies
