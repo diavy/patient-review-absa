@@ -70,7 +70,11 @@ public class ReviewParser {
             //String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
             //System.out.println(sentence);
             //System.out.println("sentiment:" + sentiment);
+            //Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+            //System.out.println("parse tree:\n" + tree.labeledYield());
+
             if (sp.containPolarity(sentence)) {
+                System.out.println(ap.getPOSTagPairs(sentence));
                 System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
                 System.out.println("find NPs: " + ap.getNounPhrases(sentence));
             } else {
