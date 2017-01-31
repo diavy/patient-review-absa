@@ -6,7 +6,6 @@
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -64,11 +63,19 @@ public class ReviewParser {
 
 
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+        SentimentParser sp = new SentimentParser(); // initialize a sentiment parser
+        AspectParser ap = new AspectParser(); // initilize a aspect parser
 
         for (CoreMap sentence : sentences) {
-            String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            System.out.println(sentence);
-            System.out.println("sentiment:" + sentiment);
+            //String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
+            //System.out.println(sentence);
+            //System.out.println("sentiment:" + sentiment);
+            if (sp.containPolarity(sentence)) {
+                System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
+                System.out.println("find NPs: " + ap.getNounPhrases(sentence));
+            } else {
+                System.out.println("neutral sentence: " + sentence.toString());
+            }
 
         }
 
@@ -84,7 +91,7 @@ public class ReviewParser {
         ReviewParser rp = new ReviewParser();
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
-        rp.parseSingleReview(reviewItems.get(1));
+        rp.parseSingleReview(reviewItems.get(2));
     }
 
 }

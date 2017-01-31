@@ -20,8 +20,10 @@ public class SentimentParser {
             //System.out.println("Node:" + child.yield());
             //System.out.println("Predicted Class: " + RNNCoreAnnotations.getPredictedClass(child));
             int pol = RNNCoreAnnotations.getPredictedClass(child);
-            if (pol != 2) // as long as we find one non-neutrual sub-sentence. the whole sentence definitely contains polarity
+            if (pol != 2) { // as long as we find one non-neutrual sub-sentence. the whole sentence definitely contains polarity
+                //System.out.println(child.yield() + ": " + sentimentText[pol]);
                 return true;
+            }
         }
         return false;
     }
