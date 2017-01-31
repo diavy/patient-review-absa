@@ -4,6 +4,7 @@
  */
 
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
+import edu.stanford.nlp.ling.LabeledWord;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
@@ -74,9 +75,14 @@ public class ReviewParser {
             //System.out.println("parse tree:\n" + tree.labeledYield());
 
             if (sp.containPolarity(sentence)) {
-                System.out.println(ap.getPOSTagPairs(sentence));
+                List<LabeledWord> pairs = ap.getPOSTagPairs(sentence);
                 System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
-                System.out.println("find NPs: " + ap.getNounPhrases(sentence));
+                List<String> extractedNPs = ap.getNounPhrases(sentence);
+                //System.out.println("find NPs: " + ap.getNounPhrases(sentence));
+                for (String np : extractedNPs) {
+                    System.out.println(np + " : " + ap.isValidAspect(np, pairs));
+                }
+
             } else {
                 System.out.println("neutral sentence: " + sentence.toString());
             }

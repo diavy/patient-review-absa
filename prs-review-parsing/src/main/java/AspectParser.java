@@ -9,13 +9,14 @@ import edu.stanford.nlp.trees.tregex.TregexMatcher;
 import edu.stanford.nlp.trees.tregex.TregexPattern;
 import edu.stanford.nlp.util.CoreMap;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by U6026806 on 1/25/17.
  */
 public class AspectParser {
+
+    private Set<String> invalidNP = new HashSet<String>(Arrays.asList("PRP", "DT"));
 
     public List<String> getNounPhrases(CoreMap sentence) {
         // extract noun-phrases from a sentence
@@ -48,8 +49,27 @@ public class AspectParser {
         return labels;
     }
 
-    public boolean isValidAspect(String nounPhrase) {
-        return false;
+    public boolean isValidAspect(String nounPhrase, List<LabeledWord> POSTagPairs) {
+        // given a noun phrase, judge whether the noun phrases is a valid candidate for aspect
+
+        //first from POS tag pairs, generate a map
+        Map<String, String> wordTag = new HashMap<String, String>();
+        for (LabeledWord pair : POSTagPairs) {
+            wordTag.put(pair.word(), pair.tag().toString());
+        }
+
+        String[] phraseTokens = nounPhrase.split(" ");
+        int tokenNums = phraseTokens.length;
+        if (tokenNums > 4)  // remove too long noun phrases
+            return false;
+
+        if (tokenNums == 1) {
+            if (invalidNP.contains(wordTag.get(phraseTokens[0])))
+                return false;
+        }
+
+
+        return true;
     }
 
 
