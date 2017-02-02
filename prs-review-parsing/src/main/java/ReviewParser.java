@@ -24,6 +24,7 @@ public class ReviewParser {
 
     private String reviewFile = "prs-review-parsing/data/review_labeling.xlsx";
 
+
     public List<String> extractReviewContent(String reviewFile) throws IOException {
         // extract review content from text file
         FileInputStream file = new FileInputStream(reviewFile);
@@ -45,7 +46,7 @@ public class ReviewParser {
         return reviewList;
     }
 
-    public void parseSingleReview(String reviewText) {
+    public List<String> parseSingleReview(String reviewText) {
         // Given a review text, parse its NLP features. may send to other follow up parsing tasks
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, sentiment");
@@ -76,23 +77,25 @@ public class ReviewParser {
 
             if (sp.containPolarity(sentence)) {
                 List<LabeledWord> pairs = ap.getPOSTagPairs(sentence);
-                System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
+                //System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
                 List<String> extractedNPs = ap.getNounPhrases(sentence);
                 //System.out.println("find NPs: " + ap.getNounPhrases(sentence));
                 for (String np : extractedNPs) {
-                    System.out.println(np + " : " + ap.isValidAspect(np, pairs));
+                    //System.out.println(np + " : " + ap.isValidAspect(np, pairs));
                 }
 
             } else {
-                System.out.println("neutral sentence: " + sentence.toString());
+                //System.out.println("neutral sentence: " + sentence.toString());
             }
 
         }
 
+        return null;
+
 
     }
 
-    public void parseMultipleReviews(List<String> reviewTextList) {
+    public void parseMultipleReviews(List<String> reviewTextList, String output) {
 
     }
 
