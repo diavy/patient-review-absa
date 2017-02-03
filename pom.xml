@@ -12,6 +12,7 @@
         <module>stanford-core-nlp-test</module>
         <module>prs-review-parsing</module>
         <module>prs-common</module>
+        <module>prs-utility</module>
     </modules>
 
 

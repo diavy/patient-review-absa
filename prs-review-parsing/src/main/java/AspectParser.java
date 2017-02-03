@@ -45,7 +45,7 @@ public class AspectParser {
         Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
         //System.out.println("parse tree:\n" + tree.labeledYield());
         List<LabeledWord> labels = tree.labeledYield();
-        System.out.println(labels.get(0).word() + ":" + labels.get(0).tag());
+        //System.out.println(labels.get(0).word() + ":" + labels.get(0).tag());
         return labels;
     }
 

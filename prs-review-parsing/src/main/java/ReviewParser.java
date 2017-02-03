@@ -13,16 +13,20 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+
 
 public class ReviewParser {
 
     private String reviewFile = "prs-review-parsing/data/review_labeling.xlsx";
+    //private final Properties props = new Properties();
+    //private final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+    public SentimentParser sentimentParser = new SentimentParser(); // initialize a sentiment parser
+    public AspectParser aspectParser = new AspectParser(); // initilize a aspect parser
 
 
     public List<String> extractReviewContent(String reviewFile) throws IOException {
@@ -46,7 +50,68 @@ public class ReviewParser {
         return reviewList;
     }
 
-    public List<String> parseSingleReview(String reviewText) {
+    public List<String> extractNounPhrases(String reviewText) {
+        /* given a review, extract key noun phrases from it  */
+        //System.out.println(reviewText);
+
+        Properties props = new Properties();
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, sentiment");
+        Annotation document = new Annotation(reviewText);
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        pipeline.annotate(document);
+
+
+        List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+        List<String> validNps = new ArrayList<String>();
+
+        for (CoreMap sentence : sentences) {
+            //System.out.println(sentence.toString());
+            if (sentimentParser.containPolarity(sentence)) {
+                List<LabeledWord> pairs = aspectParser.getPOSTagPairs(sentence);
+                List<String> extractedNPs = aspectParser.getNounPhrases(sentence);
+                for (String np : extractedNPs) {
+                    if (aspectParser.isValidAspect(np, pairs))
+                        validNps.add(np);
+                }
+            }
+        }
+
+        return validNps;
+    }
+
+    public void countNounPhrases(List<String> reviewTextList, String outputFile) throws IOException {
+        /* count the frequency of noun phrases, given a set of review, and save to output file */
+        BufferedWriter out = new BufferedWriter(new FileWriter(outputFile));
+        Map<String, Integer> npFreq = new HashMap<String, Integer>();
+        List<String> nounPhrases;
+
+
+        int index = 0;
+        System.out.println("begin to parse np from reviews, one by one....");
+        for (String review : reviewTextList) {
+            nounPhrases = extractNounPhrases(review);
+
+            for (String np : nounPhrases) {
+                np = np.toLowerCase();
+                MapUtil.addCount(npFreq, np);
+            }
+            if (index % 100 == 0) {
+                System.out.print(index);
+            }
+            index += 1;
+        }
+
+        Map<String, Integer> rankedNP = MapUtil.sortByValue(npFreq, false);
+
+        out.write(String.format("%s\t%s\n", "Aspect", "Frequency"));
+        for (String np : rankedNP.keySet()) {
+            out.write(String.format("%s\t%d\n", np, npFreq.get(np)));
+        }
+        out.close();
+
+    }
+
+    public void parseSingleReview(String reviewText) {
         // Given a review text, parse its NLP features. may send to other follow up parsing tasks
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, sentiment");
@@ -81,17 +146,15 @@ public class ReviewParser {
                 List<String> extractedNPs = ap.getNounPhrases(sentence);
                 //System.out.println("find NPs: " + ap.getNounPhrases(sentence));
                 for (String np : extractedNPs) {
-                    //System.out.println(np + " : " + ap.isValidAspect(np, pairs));
+
+                    System.out.println(np + " : " + ap.isValidAspect(np, pairs));
                 }
 
             } else {
-                //System.out.println("neutral sentence: " + sentence.toString());
+                System.out.println("neutral sentence: " + sentence.toString());
             }
 
         }
-
-        return null;
-
 
     }
 
@@ -105,6 +168,11 @@ public class ReviewParser {
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
         rp.parseSingleReview(reviewItems.get(2));
+        //System.out.println(reviewItems.size());
+        //System.exit(1);
+
+        String outFile = "prs-review-parsing/data/parsed_np.csv";
+        rp.countNounPhrases(reviewItems, outFile);
     }
 
 }
