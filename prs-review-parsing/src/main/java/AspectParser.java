@@ -68,6 +68,14 @@ public class AspectParser {
                 return false;
         }
 
+        Boolean allStopwords = true;
+        for (String token : phraseTokens) {
+            if (!StopWordUtil.isStopWord(token))
+                allStopwords = false;
+        }
+        if (allStopwords)
+            return false;
+
 
         return true;
     }
