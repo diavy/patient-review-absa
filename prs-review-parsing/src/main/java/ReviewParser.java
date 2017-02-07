@@ -70,9 +70,13 @@ public class ReviewParser {
                 List<LabeledWord> pairs = aspectParser.getPOSTagPairs(sentence);
                 List<String> extractedNPs = aspectParser.getNounPhrases(sentence);
                 for (String np : extractedNPs) {
+                    np = np.trim().toLowerCase();
                     if (aspectParser.isValidAspect(np, pairs))
                         validNps.add(np);
                 }
+                System.out.println(sentence.toString());
+                System.out.println(sentimentParser.getSentenceSentiment(sentence));
+                System.out.println(extractedNPs);
             }
         }
 
@@ -167,7 +171,8 @@ public class ReviewParser {
         ReviewParser rp = new ReviewParser();
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
-        rp.parseSingleReview(reviewItems.get(2));
+        //rp.parseSingleReview(reviewItems.get(0));
+        //System.out.println(rp.extractNounPhrases(reviewItems.get(1)));
         //System.out.println(reviewItems.size());
         //System.exit(1);
 
