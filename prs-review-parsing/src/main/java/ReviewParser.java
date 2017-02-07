@@ -74,9 +74,9 @@ public class ReviewParser {
                     if (aspectParser.isValidAspect(np, pairs))
                         validNps.add(np);
                 }
-                System.out.println(sentence.toString());
-                System.out.println(sentimentParser.getSentenceSentiment(sentence));
-                System.out.println(extractedNPs);
+                //System.out.println(sentence.toString());
+                //System.out.println(sentimentParser.getSentenceSentiment(sentence));
+                //System.out.println(extractedNPs);
             }
         }
 
