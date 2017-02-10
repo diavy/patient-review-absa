@@ -1,1 +1,10 @@
 the time
+an hour
+10 minutes
+30 minutes
+90 minutes
+20 minutes
+15 minutes
+5 minutes
+hours
+15 mins
