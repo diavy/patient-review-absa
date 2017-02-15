@@ -12,6 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="prs-utility" />
+    <orderEntry type="module" module-name="prs-common" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi:3.15-beta2" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml:3.15-beta2" level="project" />

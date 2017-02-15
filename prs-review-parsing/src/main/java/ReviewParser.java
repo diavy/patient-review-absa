@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 
 public class ReviewParser {
@@ -120,6 +121,8 @@ public class ReviewParser {
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, sentiment");
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        Map<String, String> aspectPolarity = new HashMap<String, String>();
+
 
         // add some text here
         //String text = "I went there yesterday. Dr. Gustin is very happy";
@@ -136,48 +139,51 @@ public class ReviewParser {
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
         SentimentParser sp = new SentimentParser(); // initialize a sentiment parser
         AspectParser ap = new AspectParser(); // initilize a aspect parser
+        ap.initPattern();// assign reg patterns to different aspects
 
         for (CoreMap sentence : sentences) {
-            //String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            //System.out.println(sentence);
-            //System.out.println("sentiment:" + sentiment);
-            //Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-            //System.out.println("parse tree:\n" + tree.labeledYield());
+            if (sp.containPolarity(sentence)) { // if this sentence is polaried
+                if (sentimentParser.containPolarity(sentence)) {
+                    List<LabeledWord> pairs = aspectParser.getPOSTagPairs(sentence);
+                    List<String> extractedNPs = aspectParser.getNounPhrases(sentence);
+                    for (String np : extractedNPs) {
+                        np = np.trim().toLowerCase();
+                        if (aspectParser.isValidAspect(np, pairs)) {// this is a valid np aspect
+                            for (String asepctName : ap.aspectPattern.keySet()) {
+                                Pattern pat = ap.aspectPattern.get(asepctName);
+                                if (pat.matcher(np).find())
+                                    aspectPolarity.put(asepctName, sp.getSentenceSentiment(sentence));
 
-            if (sp.containPolarity(sentence)) {
-                List<LabeledWord> pairs = ap.getPOSTagPairs(sentence);
-                //System.out.println("polary sentence: " + sentence.toString() + " :" + sp.getSentenceSentiment(sentence));
-                List<String> extractedNPs = ap.getNounPhrases(sentence);
-                //System.out.println("find NPs: " + ap.getNounPhrases(sentence));
-                for (String np : extractedNPs) {
+                            }
 
-                    System.out.println(np + " : " + ap.isValidAspect(np, pairs));
+                        }
+
+                    }
+
                 }
 
-            } else {
-                System.out.println("neutral sentence: " + sentence.toString());
             }
-
         }
-
+        System.out.println(aspectPolarity);
     }
 
     public void parseMultipleReviews(List<String> reviewTextList, String output) {
 
     }
 
-
     public static void main(String[] args) throws IOException {
         ReviewParser rp = new ReviewParser();
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
-        //rp.parseSingleReview(reviewItems.get(0));
+        String review = reviewItems.get(2);
+        System.out.println(rp.extractNounPhrases(review));
+        rp.parseSingleReview(review);
         //System.out.println(rp.extractNounPhrases(reviewItems.get(1)));
         //System.out.println(reviewItems.size());
         //System.exit(1);
 
-        String outFile = "prs-review-parsing/data/parsed_np.csv";
-        rp.countNounPhrases(reviewItems, outFile);
+        //String outFile = "prs-review-parsing/data/parsed_np.csv";
+        //rp.countNounPhrases(reviewItems, outFile);
     }
 
 }

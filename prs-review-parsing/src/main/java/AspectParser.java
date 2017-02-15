@@ -10,6 +10,8 @@ import edu.stanford.nlp.trees.tregex.TregexPattern;
 import edu.stanford.nlp.util.CoreMap;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by U6026806 on 1/25/17.
@@ -17,6 +19,34 @@ import java.util.*;
 public class AspectParser {
 
     private Set<String> invalidNP = new HashSet<String>(Arrays.asList("PRP", "DT"));
+
+    public Map<String, Pattern> aspectPattern = new HashMap<String, Pattern>();
+
+    protected void initPattern() {
+        aspectPattern.put(Aspect.Category.APPOINTMENT_SCHEDULING.name(),
+                Pattern.compile("appointment|receptionist|phone|call|front desk|scheduling|voicemail"));
+        aspectPattern.put(Aspect.Category.BILLING_INSURANCE.name(),
+                Pattern.compile("insurance|billing|credit card|receipts|the check"));
+        aspectPattern.put(Aspect.Category.CLINIC_ENVIRONMENT.name(),
+                Pattern.compile("office|room|location|lobby|bed|floor|restroom|facilities"));
+        aspectPattern.put(Aspect.Category.PRICE.name(),
+                Pattern.compile("price|money|groupon|\\$|promotion|deal|refund|pocket"));
+        aspectPattern.put(Aspect.Category.STAFF_HELPFULLNESS.name(),
+                Pattern.compile("staff|receptionist|front desk|service|manager"));
+        aspectPattern.put(Aspect.Category.WAITING_TIME.name(),
+                Pattern.compile("minutes|mins|hour"));
+        aspectPattern.put(Aspect.Category.DOCTOR_PERFORMANCE.name(),
+                Pattern.compile("massage|neck|pain|dr.? |chiropractor|doctor|treatment|body|chiropractic|" +
+                        "masseuse|feet|therapist|adjustment|ankle|acupuncture|relief|shoulder|head|leg|spine" +
+                        "muscle|arm|therapy|foot|session|injuries|stretches|hip|knee|x-ray"));
+    }
+    //private Aspect aspect = new Aspect();
+    //aspectPattern.put(aspect.Category.)
+
+
+    public Map<String, Pattern> getAspectPattern() {
+        return aspectPattern;
+    }
 
     public List<String> getNounPhrases(CoreMap sentence) {
         // extract noun-phrases from a sentence
@@ -78,6 +108,24 @@ public class AspectParser {
 
 
         return true;
+    }
+
+    public static void main(String[] args) {
+        AspectParser ap = new AspectParser();
+        ap.initPattern();
+
+        for (String asp : ap.aspectPattern.keySet()) {
+            System.out.println(asp + "\t" + ap.aspectPattern.get(asp));
+        }
+
+        String text = "this chiropractor";
+        String target;
+        Matcher matcher = ap.aspectPattern.get("DOCTOR_PERFORMANCE").matcher(text);
+        while (matcher.find()) {
+            System.out.println("Found: " + matcher.group(0));
+        }
+
+
     }
 
 
