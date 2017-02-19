@@ -175,7 +175,7 @@ public class ReviewParser {
         ReviewParser rp = new ReviewParser();
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
-        String review = reviewItems.get(2);
+        String review = reviewItems.get(4);
         System.out.println(rp.extractNounPhrases(review));
         rp.parseSingleReview(review);
         //System.out.println(rp.extractNounPhrases(reviewItems.get(1)));
