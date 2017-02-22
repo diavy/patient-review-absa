@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/nlp4j-test/nlp4j-test.iml" filepath="$PROJECT_DIR$/nlp4j-test/nlp4j-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-test/opennlp-test.iml" filepath="$PROJECT_DIR$/opennlp-test/opennlp-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/patient-review-absa.iml" filepath="$PROJECT_DIR$/patient-review-absa.iml" />
       <module fileurl="file://$PROJECT_DIR$/prs-common/prs-common.iml" filepath="$PROJECT_DIR$/prs-common/prs-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/prs-review-parsing/prs-review-parsing.iml" filepath="$PROJECT_DIR$/prs-review-parsing/prs-review-parsing.iml" />

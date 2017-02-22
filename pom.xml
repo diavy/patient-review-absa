@@ -13,6 +13,8 @@
         <module>prs-review-parsing</module>
         <module>prs-common</module>
         <module>prs-utility</module>
+        <module>opennlp-test</module>
+        <module>nlp4j-test</module>
     </modules>
 
 

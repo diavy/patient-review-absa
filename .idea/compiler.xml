@@ -22,6 +22,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="nlp4j-test" />
+        <module name="opennlp-test" />
         <module name="prs-common" />
         <module name="prs-review-parsing" />
         <module name="prs-utility" />
@@ -29,6 +31,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="nlp4j-test" target="1.5" />
+      <module name="opennlp-test" target="1.5" />
       <module name="patient-review-absa" target="1.5" />
       <module name="prs-common" target="1.5" />
       <module name="prs-review-parsing" target="1.5" />
