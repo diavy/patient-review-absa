@@ -1,8 +1,9 @@
-/**
+package com.pesi.stanford.parser; /**
  * Created by U6026806 on 1/5/17.
  * This module is used to parse the NLP features of review content
  */
 
+import com.pesi.util.MapUtil;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.LabeledWord;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -175,7 +176,7 @@ public class ReviewParser {
         ReviewParser rp = new ReviewParser();
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
-        String review = reviewItems.get(4);
+        String review = reviewItems.get(2);
         System.out.println(rp.extractNounPhrases(review));
         rp.parseSingleReview(review);
         //System.out.println(rp.extractNounPhrases(reviewItems.get(1)));

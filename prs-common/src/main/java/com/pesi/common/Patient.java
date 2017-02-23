@@ -1,6 +1,8 @@
+package com.pesi.common;
+
 /**
  * Created by xshuai on 1/20/17.
  */
-public class Clinic {
+public class Patient {
     protected String name;
 }

@@ -1,6 +1,10 @@
+package com.pesi.stanford.parser;
+
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.pesi.common.Aspect;
+import com.pesi.util.StopWordUtil;
 import edu.stanford.nlp.ling.LabeledWord;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.trees.Tree;

@@ -1,4 +1,4 @@
-/**
+package com.pesi.stanford.parser; /**
  * Created by U6026806 on 1/25/17.
  * This class deals with sentiment analysis
  */

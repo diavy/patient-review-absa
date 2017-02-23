@@ -15,6 +15,16 @@
         <module>prs-utility</module>
         <module>opennlp-test</module>
         <module>nlp4j-test</module>
+        <module>opennlp-test1</module>
+        <module>opennlp-test</module>
+        <module>nlp4j-test</module>
+        <module>opennlp-test</module>
+        <module>opennlp-test</module>
+        <module>opennlp-test</module>
+        <module>test</module>
+        <module>opennlp-test</module>
+        <module>opennlp-module-test</module>
+        <module>nlp4j-module-test</module>
     </modules>
 
 

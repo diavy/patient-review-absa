@@ -1,3 +1,5 @@
+package com.pesi.stanford;
+
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
