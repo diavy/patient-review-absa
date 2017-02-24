@@ -32,16 +32,16 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="nlp4j-module-test" target="1.5" />
+      <module name="nlp4j-module-test" target="1.8" />
       <module name="nlp4j-test" target="1.5" />
-      <module name="opennlp-module-test" target="1.5" />
+      <module name="opennlp-module-test" target="1.8" />
       <module name="opennlp-test" target="1.5" />
       <module name="opennlp-test1" target="1.5" />
-      <module name="patient-review-absa" target="1.5" />
-      <module name="prs-common" target="1.5" />
-      <module name="prs-review-parsing" target="1.5" />
-      <module name="prs-utility" target="1.5" />
-      <module name="stanford-core-nlp-test" target="1.5" />
+      <module name="patient-review-absa" target="1.8" />
+      <module name="prs-common" target="1.8" />
+      <module name="prs-review-parsing" target="1.8" />
+      <module name="prs-utility" target="1.8" />
+      <module name="stanford-core-nlp-test" target="1.8" />
       <module name="test" target="1.5" />
     </bytecodeTargetLevel>
   </component>
