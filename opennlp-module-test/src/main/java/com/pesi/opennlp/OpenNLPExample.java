@@ -2,6 +2,11 @@ package com.pesi.opennlp;
 
 import opennlp.tools.chunker.ChunkerME;
 import opennlp.tools.chunker.ChunkerModel;
+import opennlp.tools.cmdline.parser.ParserTool;
+import opennlp.tools.parser.Parse;
+import opennlp.tools.parser.Parser;
+import opennlp.tools.parser.ParserFactory;
+import opennlp.tools.parser.ParserModel;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.sentdetect.SentenceDetectorME;
@@ -64,7 +69,7 @@ public class OpenNLPExample {
         return tags;
     }
 
-    private void chunk(String text) throws IOException {
+    private void Chunk(String text) throws IOException {
         InputStream is = new FileInputStream("resources/opennlp/en-chunker.bin");
         ChunkerModel model = new ChunkerModel(is);
 
@@ -80,13 +85,29 @@ public class OpenNLPExample {
 
     }
 
+    private void Parse(String text) throws IOException {
+        InputStream is = new FileInputStream("resources/opennlp/en-parser-chunking.bin");
+        ParserModel model = new ParserModel(is);
+
+        Parser parser = ParserFactory.create(model);
+
+        Parse topParses[] = ParserTool.parseLine(text, parser, 1);
+        for (Parse p : topParses) {
+            p.show();
+        }
+
+
+    }
+
+
     public static void main(String[] args) throws IOException {
         String text = "Loving you. It is easy because you do!";
         OpenNLPExample openNLP = new OpenNLPExample();
         openNLP.SentenceDetect(text);
         openNLP.Tokenize(text);
         openNLP.POSTag(text);
-        openNLP.chunk(text);
+        openNLP.Chunk(text);
+        openNLP.Parse(text);
 
     }
 }
