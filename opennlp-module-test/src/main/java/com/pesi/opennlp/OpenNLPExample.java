@@ -101,7 +101,7 @@ public class OpenNLPExample {
 
 
     public static void main(String[] args) throws IOException {
-        String text = "Loving you. It is easy because you do!";
+        String text = "A misunderstanding between both parties led us to act out of hand. I chose to ignore Dr. Biegel's initial request to discuss my posting. In hindsight, I should have remained open to his concerns. Both Dr. Biegel and I strongly believe in a person's right to express their opinions in a public forum. We both encourage the internet community to act responsibly.";
         OpenNLPExample openNLP = new OpenNLPExample();
         openNLP.SentenceDetect(text);
         openNLP.Tokenize(text);
