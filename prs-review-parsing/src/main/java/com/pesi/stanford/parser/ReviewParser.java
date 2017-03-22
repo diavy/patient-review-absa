@@ -168,6 +168,7 @@ public class ReviewParser {
         System.out.println(aspectPolarity);
     }
 
+
     public void parseMultipleReviews(List<String> reviewTextList, String output) {
 
     }

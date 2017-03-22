@@ -75,6 +75,7 @@ public class AspectParser {
         //return npLabels;
     }
 
+
     public List<LabeledWord> getPOSTagPairs(CoreMap sentence) {
         Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
         //System.out.println("parse tree:\n" + tree.labeledYield());
