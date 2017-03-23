@@ -9,15 +9,14 @@ import edu.stanford.nlp.ling.LabeledWord;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -83,6 +82,26 @@ public class ReviewParser {
         }
 
         return validNps;
+    }
+
+    public List<String> extractNounPhrasesFromOpenNLP(String reviewText) throws IOException {
+        InputStream is = new FileInputStream("resources/opennlp/en-sent.bin");
+        SentenceModel model = new SentenceModel(is);
+        SentenceDetectorME sd = new SentenceDetectorME(model);
+        AspectParser ap = new AspectParser();
+
+        String sentences[] = sd.sentDetect(reviewText);
+        Set<String> NounPhrases = new HashSet<>();
+        for (String sent : sentences) {
+            List<String> extractedNps = ap.extractNounPharses(sent);
+            for (String np : extractedNps) {
+                NounPhrases.add(np);
+            }
+        }
+        is.close();
+
+        return new ArrayList<>(NounPhrases);
+
     }
 
     public void countNounPhrases(List<String> reviewTextList, String outputFile) throws IOException {
@@ -168,6 +187,43 @@ public class ReviewParser {
         System.out.println(aspectPolarity);
     }
 
+    public void parseSingleReviewFromOpenNLP(String reviewText) throws IOException {
+        InputStream is = new FileInputStream("resources/opennlp/en-sent.bin");
+        SentenceModel model = new SentenceModel(is);
+        SentenceDetectorME sd = new SentenceDetectorME(model);
+        AspectParser ap = new AspectParser();
+        ap.initPattern();// assign reg patterns to different aspects
+        SentimentParser sp = new SentimentParser();
+        sp.loadOpinionWords();
+        Map<String, String> aspectPolarity = new HashMap<String, String>();
+
+        String sentences[] = sd.sentDetect(reviewText);
+        //Set<String> NounPhrases = new HashSet<>();
+        List<String> nounPhrases;
+        int polarity;
+        for (String sent : sentences) {
+            polarity = sp.getSentencePolarity(sent);
+            System.out.println("sentence: " + sent);
+            System.out.println("polarity: " + polarity);
+            nounPhrases = extractNounPhrasesFromOpenNLP(sent);
+
+            for (String np : nounPhrases) {
+                np = np.trim().toLowerCase();
+                //if (aspectParser.isValidAspect(np, pairs)) {// this is a valid np aspect
+                for (String asepctName : ap.aspectPattern.keySet()) {
+                    Pattern pat = ap.aspectPattern.get(asepctName);
+                    if (pat.matcher(np).find()) {
+                        aspectPolarity.put(asepctName, Integer.toString(polarity));
+                        System.out.println("target: " + np + "\taspect: " + asepctName + "\tpolarity: " + polarity);
+                    }
+                }
+
+            }
+
+        }
+        System.out.println(aspectPolarity);
+    }
+
 
     public void parseMultipleReviews(List<String> reviewTextList, String output) {
 
@@ -178,8 +234,19 @@ public class ReviewParser {
 
         List<String> reviewItems = rp.extractReviewContent(rp.reviewFile);
         String review = reviewItems.get(2);
-        System.out.println(rp.extractNounPhrases(review));
-        rp.parseSingleReview(review);
+        System.out.println(review);
+
+
+        //Stanford NLP
+        //System.out.println(rp.extractNounPhrases(review));
+        //rp.parseSingleReview(review);
+
+        // Open NLP
+        //System.out.println(rp.extractNounPhrasesFromOpenNLP(review));
+        rp.parseSingleReviewFromOpenNLP(review);
+
+
+
         //System.out.println(rp.extractNounPhrases(reviewItems.get(1)));
         //System.out.println(reviewItems.size());
         //System.exit(1);

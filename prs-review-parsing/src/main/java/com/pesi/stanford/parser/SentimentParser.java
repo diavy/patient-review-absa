@@ -74,18 +74,22 @@ public class SentimentParser {
 
     }
 
-    public String getSentencePolarity(String sent) {
+    public int getSentencePolarity(String sent) {
+        int posScore = 0;
+        int negScore = 0;
         Matcher posMatcher = posPat.matcher(sent);
         while (posMatcher.find()) {
             System.out.println("POS: " + posMatcher.group(0));
+            posScore += 1;
         }
 
         Matcher negMatcher = negPat.matcher(sent);
         while (negMatcher.find()) {
             System.out.println("NEG: " + negMatcher.group(0));
+            negScore -= 1;
         }
 
-        return null;
+        return posScore + negScore;
 
     }
 
@@ -93,7 +97,7 @@ public class SentimentParser {
         SentimentParser sp = new SentimentParser();
         sp.loadOpinionWords();
         String sent = "fuck you! You're a bullshit. I regret that I loved you before!";
-        sp.getSentencePolarity(sent);
+        System.out.println(sp.getSentencePolarity(sent));
     }
 
 

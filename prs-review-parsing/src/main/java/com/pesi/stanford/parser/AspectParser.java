@@ -12,9 +12,16 @@ import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.trees.tregex.TregexMatcher;
 import edu.stanford.nlp.trees.tregex.TregexPattern;
 import edu.stanford.nlp.util.CoreMap;
+import opennlp.tools.cmdline.parser.ParserTool;
+import opennlp.tools.parser.Parse;
+import opennlp.tools.parser.Parser;
+import opennlp.tools.parser.ParserFactory;
+import opennlp.tools.parser.ParserModel;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -115,9 +122,39 @@ public class AspectParser {
         return true;
     }
 
-    public static void main(String[] args) {
+    public List<String> extractNounPharses(String sentence) throws IOException {
+        InputStream modelInParse = new FileInputStream("resources/opennlp/en-parser-chunking.bin"); //from http://opennlp.sourceforge.net/models-1.5/
+        ParserModel model = new ParserModel(modelInParse);
+
+        Parser parser = ParserFactory.create(model);
+        Parse topParses[] = ParserTool.parseLine(sentence, parser, 1);
+
+        Set<String> nounPhrases = new HashSet<>(); // stored the extracted NPs
+        for (Parse p : topParses) {
+            getNounPhrases(p, nounPhrases);
+        }
+
+        return new ArrayList<>(nounPhrases);
+    }
+
+    public static void getNounPhrases(Parse p, Set<String> nounPhrases) {
+        if (p == null)
+            return;
+
+        if (p.getType().equals("NP")) { //NP=noun phrase
+            nounPhrases.add(p.getCoveredText());
+        }
+        for (Parse child : p.getChildren())
+            getNounPhrases(child, nounPhrases);
+    }
+
+    public static void main(String[] args) throws IOException {
         AspectParser ap = new AspectParser();
-        ap.initPattern();
+        String sent = "a person's right to express their opinions in a public forum.";
+        System.out.println(ap.extractNounPharses(sent));
+
+
+        /*ap.initPattern();
 
         for (String asp : ap.aspectPattern.keySet()) {
             System.out.println(asp + "\t" + ap.aspectPattern.get(asp));
@@ -129,7 +166,7 @@ public class AspectParser {
         while (matcher.find()) {
             System.out.println("Found: " + matcher.group(0));
         }
-
+*/
 
     }
 
